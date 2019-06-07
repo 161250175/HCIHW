@@ -8,28 +8,48 @@
               <router-link to="/" title="Yummy官网">Yummy</router-link>
             </h1>
           </div>
+          <div class="menulist" >
+            <el-menu
+              :default-active="activeIndex"
+              class="el-menu-demo"
+              mode="horizontal"
+              text-color="#000"
+              default-active="1"
+              @select="handleSelect">
+              <el-menu-item index="1"><a ref="/">首 页</a></el-menu-item>
+              <el-menu-item index="2"><a ref="/">定外卖</a></el-menu-item>
+
+            </el-menu>
+          </div>
           <div class="right-box">
-            <div class="nav-list">
-              <el-autocomplete
-                placeholder="请输入店铺信息"
-                v-model="input"
-                :fetch-suggestions="querySearchAsync"
-                @select="handleSelect"
-                @keydown.enter.native="handleIconClick">
-                <!--<el-button  type="primary" icon="el-icon-search">搜索</el-button>-->
-                <!--<i slot="suffix" class="el-input__icon el-icon-search" @click.native="handleIconClick"></i>-->
-              </el-autocomplete>
-              <el-button  type="primary" icon="el-icon-search">搜索</el-button>
-              <!--<router-link to="/goods"><a @click="changePage(2)">首页</a></router-link>-->
-              <!-- <router-link to="/">Smartisan M1 / M1L</router-link>
-              <router-link to="/">Smartisan OS</router-link>
-              <router-link to="/">欢喜云</router-link>
-              <router-link to="/">应用下载</router-link>
-              <router-link to="/">官方论坛</router-link> -->
+            <!--<div class="nav-list">-->
+              <!--<el-autocomplete-->
+                <!--placeholder="请输入店铺信息"-->
+                <!--v-model="input"-->
+                <!--:fetch-suggestions="querySearchAsync"-->
+                <!--@select="handleSelect"-->
+                <!--@keydown.enter.native="handleIconClick">-->
+                <!--&lt;!&ndash;<el-button  type="primary" icon="el-icon-search">搜索</el-button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<i slot="suffix" class="el-input__icon el-icon-search" @click.native="handleIconClick"></i>&ndash;&gt;-->
+              <!--</el-autocomplete>-->
+              <!--<el-button  type="primary" icon="el-icon-search">搜索</el-button>-->
+              <!--&lt;!&ndash;<router-link to="/goods"><a @click="changePage(2)">首页</a></router-link>&ndash;&gt;-->
+              <!--&lt;!&ndash; <router-link to="/">Smartisan M1 / M1L</router-link>-->
+              <!--<router-link to="/">Smartisan OS</router-link>-->
+              <!--<router-link to="/">欢喜云</router-link>-->
+              <!--<router-link to="/">应用下载</router-link>-->
+              <!--<router-link to="/">官方论坛</router-link> &ndash;&gt;-->
+            <!--</div>-->
+            <div class="address">
+              <i class="el-icon-location"></i>
+              <span>{{city}}</span>
+              <span>{{region}}</span>
+              <el-divider direction="vertical"></el-divider>
+              <el-link type="warning" ref="/">切换地址</el-link>
             </div>
             <div class="nav-aside" ref="aside" :class="{fixed:st}">
               <div class="user pr">
-                <router-link to="/user">个人中心</router-link>
+                <router-link to="/login">个人中心</router-link>
                 <!--用户信息显示-->
                 <div class="nav-user-wrapper pa" v-if="login">
                   <div class="nav-user-list">
@@ -64,84 +84,10 @@
                   </div>
                 </div>
               </div>
-              <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)"
-                   ref="positionMsg">
-                <router-link to="/cart"></router-link>
-                <span class="cart-num">
-                  <i class="num" :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
-                <!--购物车显示块-->
-                <div class="nav-user-wrapper pa active" v-show="showCart">
-                  <div class="nav-user-list">
-                    <div class="full" v-show="totalNum">
-                      <!--购物列表-->
-                      <div class="nav-cart-items">
-                        <ul>
-                          <li class="clearfix" v-for="(item,i) in cartList" :key="i">
-                            <div class="cart-item">
-                              <div class="cart-item-inner">
-                                <a @click="openProduct(item.productId)">
-                                  <div class="item-thumb">
-                                    <img :src="item.productImg">
-                                  </div>
-                                  <div class="item-desc">
-                                    <div class="cart-cell"><h4>
-                                      <a href="" v-text="item.productName"></a>
-                                    </h4>
-                                      <!-- <p class="attrs"><span>白色</span></p> -->
-                                      <h6><span class="price-icon">¥</span><span
-                                        class="price-num">{{item.salePrice}}</span><span
-                                        class="item-num">x {{item.productNum}}</span>
-                                      </h6></div>
-                                  </div>
-                                </a>
-                                <div class="del-btn del" @click="delGoods(item.productId)">删除</div>
-                              </div>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                      <!--总件数-->
-                      <div class="nav-cart-total"><p>共 <strong>{{totalNum}}</strong> 件商品</p> <h5>合计：<span
-                        class="price-icon">¥</span><span
-                        class="price-num">{{totalPrice}}</span></h5>
-                        <h6>
-                          <y-button classStyle="main-btn"
-                                    style="height: 40px;width: 100%;margin: 0;color: #fff;font-size: 14px;line-height: 38px"
-                                    text="去购物车" @btnClick="toCart"></y-button>
-                        </h6>
-                      </div>
-                    </div>
-                    <div v-show="!totalNum" style="height: 313px;text-align: center" class="cart-con">
-                      <p>您的购物车竟然是空的!</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
-      <!--<slot name="nav">-->
-        <!--<div class="nav-sub" :class="{fixed:st}">-->
-          <!--<div class="nav-sub-bg"></div>-->
-          <!--<div class="nav-sub-wrapper" :class="{fixed:st}">-->
-            <!--<div class="w">-->
-              <!--<ul class="nav-list2">-->
-                <!--<li>-->
-                  <!--<router-link to="/"><a @click="changGoods(-1)" :class="{active:choosePage===-1}">首页</a></router-link>-->
-                <!--</li>-->
-                <!--<li>-->
-                  <!--<a @click="changGoods(-2)" :class="{active:choosePage===-2}">全部</a>-->
-                <!--</li>-->
-                <!--<li v-for="(item,i) in navList" :key="i">-->
-                  <!--<a @click="changGoods(i, item)" :class="{active:i===choosePage}">{{item.picUrl}}</a>-->
-                <!--</li>-->
-              <!--</ul>-->
-              <!--<div></div>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</slot>-->
     </div>
 </template>
 <script>
@@ -156,62 +102,22 @@
     data () {
       return {
         user: {},
-        // 查询数据库的商品
-        st: false,
         // 头部购物车显示
-        cartShow: false,
-        positionL: 0,
-        positionT: 0,
-        timerCartShow: null, // 定时隐藏购物车
-        input: '',
-        choosePage: -1,
-        searchResults: [],
+        province: '江苏',
+        city: '南京',
+        region: '鼓楼区',
         timeout: null,
         token: '',
-        navList: []
       }
     },
     computed: {
       ...mapState([
         'cartList', 'login', 'receiveInCart', 'showCart', 'userInfo'
       ]),
-      // 计算价格
-      totalPrice () {
-        var totalPrice = 0
-        this.cartList && this.cartList.forEach(item => {
-          totalPrice += (item.productNum * item.salePrice)
-        })
-        return totalPrice
-      },
-      // 计算数量
-      totalNum () {
-        var totalNum = 0
-        this.cartList && this.cartList.forEach(item => {
-          totalNum += (item.productNum)
-        })
-        return totalNum
-      }
     },
     methods: {
       ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO', 'EDIT_CART']),
-      handleIconClick (ev) {
-        console.log("search")
-        if (this.$route.path === '/search') {
-          this.$router.push({
-            path: '/refreshsearch',
-            query: {
-              key: this.input
-            }
-          })
-        } else {
-          this.$router.push({
-            path: '/search',
-            query: {
-              key: this.input
-            }
-          })
-        }
-      },
+
       showError (m) {
         this.$message.error({
           message: m
@@ -241,97 +147,7 @@
           }
         }
       },
-      // 搜索框提示
-      loadAll () {
-        let params = {
-          params: {
-            key: this.input
-          }
-        }
-        getQuickSearch(params).then(res => {
-          if (res === null || res === '') {
-            return
-          }
-          if (res.error) {
-            this.showError(res.error.reason)
-            return
-          }
-          var array = []
-          var maxSize = 5
-          if (res.hits.hits.length <= 5) {
-            maxSize = res.hits.hits.length
-          }
-          for (var i = 0; i < maxSize; i++) {
-            var obj = {}
-            obj.value = res.hits.hits[i]._source.productName
-            array.push(obj)
-          }
-          if (array.length !== 0) {
-            this.searchResults = array
-          } else {
-            this.searchResults = []
-          }
-        })
-      },
-      querySearchAsync (queryString, cb) {
-        if (this.input === undefined) {
-          cb([])
-          return
-        }
-        this.input = this.input.trim()
-        if (this.input === '') {
-          cb([])
-          return
-        } else {
-          this.loadAll()
-          setTimeout(() => {
-            cb(this.searchResults)
-          }, 300)
-        }
-      },
-      handleSelect (item) {
-        this.input = item.value
-      },
-      // 购物车显示
-      cartShowState (state) {
-        this.SHOW_CART({showCart: state})
-      },
-      // 登陆时获取一次购物车商品
-      _getCartList () {
-        getCartList({userId: getStore('userId')}).then(res => {
-          if (res.success === true) {
-            setStore('buyCart', res.result)
-          }
-          // 重新初始化一次本地数据
-        }).then(this.INIT_BUYCART)
-      },
-      // 删除商品
-      delGoods (productId) {
-        if (this.login) { // 登陆了
-          cartDel({userId: getStore('userId'), productId}).then(res => {
-            this.EDIT_CART({productId})
-          })
-        } else {
-          this.EDIT_CART({productId})
-        }
-      },
-      toCart () {
-        this.$router.push({path: '/cart'})
-      },
-      // 控制顶部
-      navFixed () {
-        if (this.$route.path === '/goods' || this.$route.path === '/home' || this.$route.path === '/goodsDetails' || this.$route.path === '/thanks') {
-          var st = document.documentElement.scrollTop || document.body.scrollTop
-          st >= 100 ? this.st = true : this.st = false
-          // 计算小圆当前位置
-          let num = document.querySelector('.num')
-          this.positionL = num.getBoundingClientRect().left
-          this.positionT = num.getBoundingClientRect().top
-          this.ADD_ANIMATION({cartPositionL: this.positionL, cartPositionT: this.positionT})
-        } else {
-          return
-        }
-      },
+
       // 退出登陆
       _loginOut () {
         let params = {
@@ -345,17 +161,6 @@
         })
       },
       // 通过路由改变导航文字样式
-      getPage () {
-        let path = this.$route.path
-        // let fullPath = this.$route.fullPath
-        if (path === '/' || path === '/home') {
-          this.changePage(-1)
-        } else if (path === '/goods') {
-          this.changePage(-2)
-        } else {
-          this.changePage(0)
-        }
-      },
       openProduct (productId) {
         window.open('//' + window.location.host + '/#/goodsDetails?productId=' + productId)
       },
@@ -373,10 +178,6 @@
       } else {
         this.INIT_BUYCART()
       }
-      this.navFixed()
-      this.getPage()
-      window.addEventListener('scroll', this.navFixed)
-      window.addEventListener('resize', this.navFixed)
       if (typeof (this.$route.query.key) !== undefined) {
         this.input = this.$route.query.key
       }
@@ -390,81 +191,7 @@
   @import "../assets/style/theme";
   @import "../assets/style/mixin";
 
-  .move_in_cart {
-    animation: mymove .5s ease-in-out;
-  }
 
-  @keyframes mymove {
-    0% {
-      transform: scale(1)
-    }
-    25% {
-      transform: scale(.8)
-    }
-    50% {
-      transform: scale(1.2)
-    }
-    75% {
-      transform: scale(.9)
-    }
-    100% {
-      transform: scale(1)
-    }
-  }
-
-  @-moz-keyframes mymove {
-    0% {
-      transform: scale(1)
-    }
-    25% {
-      transform: scale(.8)
-    }
-    50% {
-      transform: scale(1.2)
-    }
-    75% {
-      transform: scale(.9)
-    }
-    100% {
-      transform: scale(1)
-    }
-  }
-
-  @-webkit-keyframes mymove {
-    0% {
-      transform: scale(1)
-    }
-    25% {
-      transform: scale(.8)
-    }
-    50% {
-      transform: scale(1.2)
-    }
-    75% {
-      transform: scale(.9)
-    }
-    100% {
-      transform: scale(1)
-    }
-  }
-
-  @-o-keyframes mymove {
-    0% {
-      transform: scale(1)
-    }
-    25% {
-      transform: scale(.8)
-    }
-    50% {
-      transform: scale(1.2)
-    }
-    75% {
-      transform: scale(.9)
-    }
-    100% {
-      transform: scale(1)
-    }
-  }
 
   .header-box {
     //background: #f7f7f7;
@@ -477,8 +204,8 @@
     //background-image: -webkit-linear-gradient(#000, #121212);
     //background-image: linear-gradient(#000, #121212);
     width: 100%;
-    background: #f7f7f7;
-    box-shadow: 0 0 15px #666;
+    //background: #f7f7f7;
+    box-shadow: 0 0 10px #666;
     height:73px;
     top: 0;
     left: 0;
@@ -931,7 +658,6 @@
       }
     }
   }
-
   @media (max-height: 780px) {
     .nav-cart-items {
       max-height: 423px !important;
@@ -950,7 +676,19 @@
     }
   }
 
-  // 用户信息弹出
+  .menulist {
+    position:absolute;
+    left:240px;
+    font-size: 15px;
+  }
+  .el-menu-item {
+    font-size:15px;
+  }
+ .el-menu-item.is-active {
+   border-bottom:2px solid #E6A23C;
+   text-shadow: 1px 0 0 currentColor;
+ }
+    // 用户信息弹出
   .nav-user-wrapper {
     position: absolute;
     z-index: 30;
@@ -1080,6 +818,11 @@
       color: #333333;
       font-size: 16px;
     }
+  }
+  .address span{
+    position:relative;
+    bottom: -2px;
+    font-size: 14px;
   }
 
   .cart-con:before {

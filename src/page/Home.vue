@@ -30,8 +30,11 @@
 <style scoped>
 .home {
   width:100%;
+
 }
 .el-carousel {
   padding-top: 10px;
+  //position: fixed;
 }
+
 </style>

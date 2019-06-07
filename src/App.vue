@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <div class="main">
     <el-header >
       <!--头部组件渲染-->
       <header-ly></header-ly>
@@ -14,7 +14,7 @@
     <el-footer>
       <footer-ly></footer-ly>
     </el-footer>
-  </el-container>
+  </div>
 </template>
 
 <script>
@@ -30,5 +30,16 @@
 </script>
 
 <style>
-
+  body {
+  //width:100%;
+  margin-left: 0px;
+    margin-right: 0px;
+}
+  .el-footer {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  body {
+    background: #f7f7f7;
+  }
 </style>
