@@ -30,7 +30,7 @@
 
         </el-input>
       </el-form-item>
-      <p class="notify">新用户登录即自动注册，并表示已经同意<a href="/" style="text-decoration: none;color:#606266;" target="_blank">《用户服务协议》</a></p>
+      <p class="notify">新用户登录将会自动注册，并表示已经同意<a href="/" style="text-decoration: none;color:#606266;" target="_blank">《用户服务协议》</a></p>
       <el-form-item >
         <el-button
           type="warning"
@@ -130,7 +130,7 @@
         this.$router.push('/cus/regin')
       },
       getConfirmCode() {}
-    }
+    },
   }
 </script>
 

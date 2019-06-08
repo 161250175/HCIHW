@@ -1,23 +1,30 @@
 <template>
   <el-main>
-
+    <div class="logo">
+    <img src="../assets/logo.png"  style="height:50px;width:50px;" >
+    </div>
     <el-form
       :model="LoginForm"
       ref="LoginForm"
       :rules="rule"
       label-width="0"
       class="login-form">
+      <div class="validata-info">
+        <i class="el-icon-warning"></i>
+        {{valmsg}}
+      </div>
       <span style="color:#606266; padding-right: 135px;" >用户登录
       </span>
       <el-link type='info' ref="" style="color:#606266;">普通方式登录<i></i>
       </el-link>
       <i class="el-icon-user-solid"></i>
-      <el-form-item prop="username" style="padding-top:5px;">
+      <el-form-item prop="phone" style="padding-top:5px;">
 
         <el-input
           v-model="LoginForm.phone"
           prefix-icon="el-icon-phone"
-          placeholder="手机号，未注册将自动注册" >
+          placeholder="手机号，未注册将自动注册"
+         >
         </el-input>
       </el-form-item>
 
@@ -27,10 +34,10 @@
           v-model="LoginForm.confirmCode"
           prefix-icon="el-icon-lock"
           placeholder="验证码" >
-          <el-button slot="append" @click="getConfirmCode">获取验证码</el-button>
+          <el-button  :disabled="getConfirmCodeButton" style="width: 112px" slot="append" @click="getConfirmCode"><div id="timer"></div></el-button>
         </el-input>
       </el-form-item>
-        <p class="notify">新用户登录即自动注册，并表示已经同意<a href="/" style="text-decoration: none;color:#606266;" target="_blank">《用户服务协议》</a></p>
+        <p class="notify">新用户登录将会自动注册，并表示已经同意<a href="/" style="text-decoration: none;color:#606266;" target="_blank">《用户服务协议》</a></p>
       <el-form-item >
         <el-button
           type="warning"
@@ -46,28 +53,29 @@
 </template>
 
 <script>
+  import {GetConfirmCode} from "../api/permission";
+
   export default {
     // ....
     data () {
       return {
         LoginForm: {
-          username: '',
-          password: ''
+          phone: '',
+          confirmCode: '',
         },
+        valmsg: '手机号输入不正确，请重新输入',
+        getConfirmCodeButton:false,
         logining: false,
         rule: {
           username: [
             {
               required: true,
-              type: 'email',
-              message: '邮箱格式错误',
               trigger: 'blur'
             }
           ],
           password: [
             {
               required: true,
-              message: '密码是必须的！',
               trigger: 'blur'
             }
           ]
@@ -123,13 +131,53 @@
           }
         })
       },
-      reset () {
-        this.$refs.LoginForm.resetFields()
+      getConfirmCode() {
+        if(!this.isPhoneNum(this.LoginForm.phone)) {
+          var vali = document.getElementsByClassName("validata-info")[0]
+          this.valmsg="手机号输入不正确，请重新输入"
+          vali.style.visibility = "visible";
+          return;
+        }
+        else {
+          var vali = document.getElementsByClassName("validata-info")[0]
+          vali.style.visibility = "visible";
+          this.valmsg="已发送验证码";
+          //getConfirmCodeButton.style.cursor = "not-allow";
+          this.getConfirmCodeButton=true;
+          this.time(10);
+        }
       },
-      toregin () {
-        this.$router.push('/cus/regin')
+      isPhoneNum(value) {
+        const reg =/^[1][3,4,5,7,8][0-9]{9}$/;
+        if(value==''||value==undefined||value==null){
+          return false;
+        }else {
+          if ((reg.test(value))) {
+            return true;
+          } else {
+            return false;
+          }
+        }
       },
-      getConfirmCode() {}
+      time(i) {
+        document.getElementById("timer").innerHTML = "重新获取("+i+")";
+        var i = i-1;
+        //console.log(i);
+        if(i<0) {
+          document.getElementById("timer").innerHTML = "获取验证码";
+          this.getConfirmCodeButton=false;
+          return;
+        }
+        let _this = this;
+        setTimeout(function() {
+          _this.time(i);
+        },1000);
+      },
+    },
+    mounted() {
+      var header = document.getElementsByClassName("header-box")[0];
+      header.style.visibility = "hidden";
+      document.getElementById("timer").innerHTML = "获取验证码";
     }
   }
 </script>
@@ -137,11 +185,11 @@
 <style scoped>
 
   .login-form {
-    margin: 20px auto;
+    margin: 0px auto;
     width: 310px;
     //background: #fff;
     //box-shadow: 0 0 35px #B4BCCC;
-    padding: 30px 30px 0 30px;
+    padding: 0px 30px 0 30px;
     border-radius: 25px;
   }
   .el-link:hover {
@@ -162,8 +210,24 @@
     font-size:10px;
     margin-top: 5px;
   }
-  .notyfy a:hover {
+  .logo {
+    text-align: center;
+  }
+  .validata-info {
+    margin-bottom: 10px;
+    padding: 10px;
 
+    border: 1px solid #f5d8a7;
+    border-radius: 2px;
+    background: #fff6db;
+    font-size: 12px;
+    border-color: #EEE;
+    visibility: hidden;
+    //background: #f6f6f6
+  }
+  .el-button.is-disabled {
+    background-color: #EBEEF5;
+    color:#909399;
   }
 </style>
 
