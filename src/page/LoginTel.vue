@@ -1,7 +1,11 @@
 <template>
-  <el-main>
+  <el-main >
     <div class="logo">
     <img src="../assets/logo.png"  style="height:50px;width:50px;" >
+    </div>
+    <div class="validata-info"  style="width:350px;margin: 0 auto; margin-bottom: 10px">
+      <i class="el-icon-warning"></i>
+      {{valmsg}}
     </div>
     <el-form
       :model="LoginForm"
@@ -9,10 +13,6 @@
       :rules="rule"
       label-width="0"
       class="login-form">
-      <div class="validata-info">
-        <i class="el-icon-warning"></i>
-        {{valmsg}}
-      </div>
       <span style="color:#606266; padding-right: 135px;" >用户登录
       </span>
       <el-link type='info' ref="" style="color:#606266;">普通方式登录<i></i>
@@ -24,11 +24,12 @@
           v-model="LoginForm.phone"
           prefix-icon="el-icon-phone"
           placeholder="手机号，未注册将自动注册"
+          @input="phoneChange"
          >
         </el-input>
       </el-form-item>
 
-      <el-form-item prop="password">
+      <el-form-item prop="confirmCode">
 
         <el-input
           v-model="LoginForm.confirmCode"
@@ -69,13 +70,14 @@
         rule: {
           username: [
             {
-              required: true,
+              //required: true,
               trigger: 'blur'
             }
           ],
           password: [
             {
-              required: true,
+              //required: true,
+              //message: "",
               trigger: 'blur'
             }
           ]
@@ -136,14 +138,28 @@
           var vali = document.getElementsByClassName("validata-info")[0]
           this.valmsg="手机号输入不正确，请重新输入"
           vali.style.visibility = "visible";
+          setTimeout(function(){
+            vali.style.visibility = "hidden";
+          },3000)
           return;
         }
         else {
-          var vali = document.getElementsByClassName("validata-info")[0]
-          vali.style.visibility = "visible";
-          this.valmsg="已发送验证码";
+          // var vali = document.getElementsByClassName("validata-info")[0]
+          // vali.style.visibility = "visible";
+          // this.valmsg="已发送验证码";
+          var fd = new FormData();
+          fd.append('tel',this.LoginForm.phone)
+          GetConfirmCode(fd).then(res => {}).catch(err=>{});
+          this.$message({
+            type: 'success',//success,warning
+            message: '已发送验证码'
+          })
+          var con = document.getElementById("timer");
+          con.style.color = "#909399";
+          //console.log('phone change')
           //getConfirmCodeButton.style.cursor = "not-allow";
           this.getConfirmCodeButton=true;
+          //this.phoneChange();
           this.time(10);
         }
       },
@@ -173,6 +189,14 @@
           _this.time(i);
         },1000);
       },
+      phoneChange() {
+        var confirmCode = document.getElementById("timer");
+        if(this.LoginForm.phone.length==11)
+          confirmCode.style.color = "#000";
+        else
+          confirmCode.style.color = "#909399";
+
+      }
     },
     mounted() {
       var header = document.getElementsByClassName("header-box")[0];
@@ -228,6 +252,12 @@
   .el-button.is-disabled {
     background-color: #EBEEF5;
     color:#909399;
+  }
+  .el-form {
+    background-color: #fff;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    border-radius: 5px;
   }
 </style>
 

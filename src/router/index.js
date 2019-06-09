@@ -4,6 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 import Home from '@/page/Home'
 import LoginTel from '@/page/LoginTel'
 import LoginNor from '@/page/LoginNor'
+
 Vue.use(Router)
 
 export default new Router({
@@ -21,8 +22,8 @@ export default new Router({
     },
     {
       path: '/login/normal',
-      name: 'LoginTel',
-      component:LoginTel
+      name: 'LoginNor',
+      component:LoginNor
     },
 
   ],
